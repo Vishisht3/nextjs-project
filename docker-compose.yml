@@ -1,26 +1,42 @@
 version: '3.8'
+
 services:
   db:
-    image: postgres:15
+    image: ankane/pgvector:v0.5.1
+    container_name: biomed_db
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
       POSTGRES_DB: biomed_rag
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   api:
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: biomed_api
     ports:
       - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://admin:password@db:5432/biomed_rag
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
     depends_on:
       - db
-    environment:
-      - DATABASE_URL=postgresql://admin:password@db:5432/biomed_rag
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: biomed_web
     ports:
       - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
     depends_on:
       - api
+
+volumes:
+  pgdata:

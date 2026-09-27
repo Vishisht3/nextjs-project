@@ -1,0 +1,12 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": [
+    ".",
+    "api",
+    "agent",
+    "eval",
+    "mcp_server"
+  ],
+  "reportMissingImports": "warning"
+}

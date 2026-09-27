@@ -1,0 +1,10 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}",
+    "${workspaceFolder}/api",
+    "${workspaceFolder}/agent",
+    "${workspaceFolder}/eval",
+    "${workspaceFolder}/mcp_server"
+  ]
+}
