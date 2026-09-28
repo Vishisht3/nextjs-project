@@ -1,87 +1,49 @@
-<p align="center">
-  <a href="https://nextjs-fastapi-starter.vercel.app/">
-    <img src="https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png" height="96">
-    <h3 align="center">Next.js FastAPI Starter</h3>
-  </a>
-</p>
+# Agentic RAG Research Assistant
 
-<p align="center">Simple Next.j 14 boilerplate that uses <a href="https://fastapi.tiangolo.com/">FastAPI</a> as the API backend.</p>
+This project combines a Next.js frontend with a FastAPI backend for grounded research and study-material retrieval.
 
-<br/>
+## Project Layout
 
-## Introduction
+- `frontend/` contains the Next.js UI, components, public assets, and Node.js dependencies.
+- `backend/` contains the FastAPI service, agent loop, ingestion pipeline, retrieval stack, pgvector store, and Python dependencies.
+- `docker-compose.yml` runs the frontend, backend, and PostgreSQL/pgvector database together.
 
-This is a hybrid Next.js 14 + Python template. One great use case of this is to write Next.js apps that use Python AI libraries on the backend, while still having the benefits of Next.js Route Handlers and Server Side Rendering.
+The backend supports PDF, DOCX, PPTX, TeX, and TXT ingestion, hybrid pgvector plus BM25 retrieval, live arXiv/web lookup, and citation verification before responses stream to the UI.
 
-## How It Works
+## Local Development
 
-The Python/FastAPI server is mapped into to Next.js app under `/api/`.
+Create the Python environment and install both dependency sets:
 
-This is implemented using [`next.config.js` rewrites](https://github.com/digitros/nextjs-fastapi/blob/main/next.config.js) to map any request to `/api/py/:path*` to the FastAPI API, which is hosted in the `/api` folder.
-
-Also, the app/api routes are available on the same domain, so you can use NextJs Route Handlers and make requests to `/api/...`.
-
-On localhost, the rewrite will be made to the `127.0.0.1:8000` port, which is where the FastAPI server is running.
-
-In production, the FastAPI server is hosted as [Python serverless functions](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python) on Vercel.
-
-## Demo
-
-https://nextjs-fastapi-starter.vercel.app/
-
-## Deploy Your Own
-
-You can clone & deploy it to Vercel with one click:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdigitros%2Fnextjs-fastapi%2Ftree%2Fmain)
-
-## Developing Locally
-
-You can clone & create this repo with the following command
-
-```bash
-npx create-next-app nextjs-fastapi --example "https://github.com/digitros/nextjs-fastapi"
-```
-
-## Getting Started
-
-First, create and activate a virtual environment:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-Then, install the dependencies:
-
-```bash
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r backend\requirements.txt
+cd frontend
 npm install
-# or
-yarn
-# or
-pnpm install
 ```
 
-Then, run the development server(python dependencies will be installed automatically here):
+Run the backend from the repository root:
 
-```bash
+```powershell
+cd backend
+uvicorn api.main:app --reload --port 8000
+```
+
+Run the frontend in a second terminal:
+
+```powershell
+cd frontend
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend is available at `http://localhost:3000`; the API documentation is available at `http://localhost:8000/docs`.
 
-The FastApi server will be running on [http://127.0.0.1:8000](http://127.0.0.1:8000) – feel free to change the port in `package.json` (you'll also need to update it in `next.config.js`).
+## Docker Compose
 
-## Learn More
+Set `GROQ_API_KEY` in the environment, then run:
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+docker compose up --build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [FastAPI Documentation](https://fastapi.tiangolo.com/) - learn about FastAPI features and API.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This starts PostgreSQL with pgvector on port `5432`, the API on port `8000`, and the frontend on port `3000`.

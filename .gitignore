@@ -19,3 +19,7 @@ build/
 .env.development.local
 .env.production.local
 tsconfig.tsbuildinfo
+
+# VS Code
+.vscode/*
+!.vscode/settings.json

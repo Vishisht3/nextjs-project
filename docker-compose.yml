@@ -15,7 +15,7 @@ services:
 
   api:
     build:
-      context: ./api
+      context: ./backend
       dockerfile: Dockerfile
     container_name: biomed_api
     ports:
@@ -28,8 +28,8 @@ services:
 
   web:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: biomed_web
     ports:
       - "3000:3000"
